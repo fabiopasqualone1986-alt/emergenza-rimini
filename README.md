@@ -1,0 +1,2 @@
+# emergenza-rimini
+Aree emergenza
