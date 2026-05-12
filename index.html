@@ -1,14 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Punti Emergenza Rimini - PWA</title>
+  <title>Emergenza Rimini</title>
 
-  <meta name="theme-color" content="#b71c1c" />
-  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#c62828" />
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
     html, body {
@@ -17,7 +18,7 @@
       width: 100%;
       height: 100%;
       font-family: Arial, sans-serif;
-      background: #111;
+      background: #f2f2f2;
     }
 
     #map {
@@ -35,7 +36,7 @@
       padding: 12px;
       border-radius: 14px;
       box-shadow: 0 2px 14px rgba(0,0,0,0.4);
-      max-width: 320px;
+      max-width: 300px;
     }
 
     .panel h2 {
@@ -45,32 +46,38 @@
 
     .btn {
       display: inline-block;
-      margin-top: 8px;
+      margin-top: 10px;
       padding: 8px 12px;
       border-radius: 10px;
-      background: #b71c1c;
+      background: #c62828;
       color: white;
       text-decoration: none;
       font-size: 14px;
-      border: none;
-      cursor: pointer;
     }
 
     .legend {
       margin-top: 12px;
-      font-size: 13px;
+      font-size: 14px;
+      line-height: 1.6;
     }
 
-    .legend div {
-      margin-bottom: 5px;
-    }
-
-    .dot {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
+    .sos-button {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      width: 75px;
+      height: 75px;
       border-radius: 50%;
-      margin-right: 6px;
+      background: #c62828;
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      box-shadow: 0 2px 12px rgba(0,0,0,.5);
     }
   </style>
 </head>
@@ -79,62 +86,44 @@
 <div class="panel">
   <h2>Punti Emergenza Rimini</h2>
 
-  <button class="btn" onclick="toggleMode()">
-    Modalità Giorno/Notte
-  </button>
-
-  <div id="nearest" style="margin-top:12px;">
+  <div id="nearest">
     Ricerca posizione...
   </div>
 
   <div class="legend">
-    <div><span class="dot" style="background:#1976d2"></span>Aree di attesa</div>
-    <div><span class="dot" style="background:#2e7d32"></span>Aree di assistenza</div>
-    <div><span class="dot" style="background:#f57c00"></span>Aree di ammassamento</div>
-    <div><span class="dot" style="background:#c62828"></span>Strutture sanitarie</div>
+    👥 Attesa<br>
+    ⛺ Assistenza<br>
+    🏥 Sanitaria
   </div>
 </div>
+
+<a class="sos-button" href="tel:112">SOS</a>
 
 <div id="map"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-  // MAPPA
-  const map = L.map('map').setView([44.06, 12.57], 12);
 
-  // TILE LAYERS
-  const darkTiles = L.tileLayer(
-    'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-    {
-      attribution: '&copy; OpenStreetMap & CARTO'
-    }
-  );
+// MAPPA
+const map = L.map('map').setView([44.06, 12.57], 12);
 
-  const lightTiles = L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-      attribution: '&copy; OpenStreetMap contributors'
-    }
-  );
+L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    attribution: '&copy; OpenStreetMap contributors'
+  }
+).addTo(map);
 
-  // modalità iniziale
-  darkTiles.addTo(map);
+// ICONE
+const icons = {
+  attesa: '👥',
+  assistenza: '⛺',
+  sanitaria: '🏥'
+};
 
-  // layer marker
-  const markerGroup = L.layerGroup();
-  markerGroup.addTo(map);
-
-  // COLORI
-  const colors = {
-    attesa: '#1976d2',
-    assistenza: '#2e7d32',
-    ammassamento: '#f57c00',
-    sanitaria: '#c62828'
-  };
-
-  // DATI
-  const points = [
+// TUTTI I PUNTI
+const points = [
   // AREE DI ATTESA
   { name:'AA001 - Parcheggio Viale Gebel', type:'attesa', lat:44.102528, lon:12.513665 },
   { name:'AA002 - Via Verenin Porto Palos', type:'attesa', lat:44.099525, lon:12.521602 },
@@ -201,7 +190,7 @@
   { name:'AA063 - Mercato Miramare', type:'attesa', lat:44.027194, lon:12.623264 },
   { name:'AA064 - Gaiofana', type:'attesa', lat:44.003192, lon:12.567468 },
 
-  // AREE DI ASSISTENZA
+  // ASSISTENZA
   { name:'AAS001 - Torre Pedrera', type:'assistenza', lat:44.100311, lon:12.506934 },
   { name:'AAS002 - Viserbella', type:'assistenza', lat:44.098594, lon:12.517840 },
   { name:'AAS003 - San Vito', type:'assistenza', lat:44.087294, lon:12.458147 },
@@ -222,51 +211,61 @@
   { name:'AAS018 - Miramare Erba', type:'assistenza', lat:44.030476, lon:12.610279 },
   { name:'AAS019 - Miramare Sintetico', type:'assistenza', lat:44.028260, lon:12.613756 },
 
-  // AMMASSAMENTO
-  { name:'AMM001 - Protezione Civile', type:'ammassamento', lat:44.057790, lon:12.538881 },
-  { name:'AMM002 - Toys Center', type:'ammassamento', lat:44.025051, lon:12.551093 },
-
   // SANITARIA
   { name:'SAN001 - Ex Questura', type:'sanitaria', lat:44.054650, lon:12.578700 }
 ];
 
-  // MARKER
-  points.forEach(p => {
-    const marker = L.circleMarker([p.lat, p.lon], {
-      radius: 7,
-      color: colors[p.type],
-      fillColor: colors[p.type],
-      fillOpacity: 0.95,
-      weight: 2
-    }).addTo(markerGroup);
+// MARKER
+points.forEach(point => {
 
-    marker.bindPopup(`
-      <b>${p.name}</b><br><br>
-      <a href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lon}" target="_blank">
-        Naviga con Google Maps
-      </a>
-    `);
+  const icon = L.divIcon({
+    html: `<div style="font-size:28px;">${icons[point.type]}</div>`,
+    className: '',
+    iconSize: [30, 30],
+    iconAnchor: [15, 30]
   });
 
-  // DISTANZA
-  function distance(lat1, lon1, lat2, lon2) {
-    const R = 6371;
+  const marker = L.marker(
+    [point.lat, point.lon],
+    { icon: icon }
+  ).addTo(map);
 
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
+  marker.bindPopup(`
+    <b>${point.name}</b><br><br>
 
-    const a =
-      Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(lat1*Math.PI/180) *
-      Math.cos(lat2*Math.PI/180) *
-      Math.sin(dLon/2) *
-      Math.sin(dLon/2);
+    <a target="_blank"
+      href="https://www.google.com/maps/dir/?api=1&destination=${point.lat},${point.lon}">
+      Naviga con Google Maps
+    </a>
+  `);
 
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  }
+});
 
-  // GEOLOCALIZZAZIONE
-  navigator.geolocation.getCurrentPosition(pos => {
+// DISTANZA
+function distance(lat1, lon1, lat2, lon2) {
+
+  const R = 6371;
+
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+
+  const a =
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1*Math.PI/180) *
+    Math.cos(lat2*Math.PI/180) *
+    Math.sin(dLon/2) *
+    Math.sin(dLon/2);
+
+  return R * 2 * Math.atan2(
+    Math.sqrt(a),
+    Math.sqrt(1-a)
+  );
+}
+
+// GEOLOCALIZZAZIONE
+navigator.geolocation.getCurrentPosition(
+
+  pos => {
 
     const userLat = pos.coords.latitude;
     const userLon = pos.coords.longitude;
@@ -281,83 +280,55 @@
     let nearest = null;
     let minDist = Infinity;
 
-    points.forEach(p => {
-      const d = distance(userLat, userLon, p.lat, p.lon);
+    points.forEach(point => {
+
+      const d = distance(
+        userLat,
+        userLon,
+        point.lat,
+        point.lon
+      );
 
       if(d < minDist) {
         minDist = d;
-        nearest = p;
+        nearest = point;
       }
+
     });
 
     document.getElementById('nearest').innerHTML = `
       <b>Punto più vicino:</b><br>
       ${nearest.name}<br>
-      Distanza: ${minDist.toFixed(2)} km<br>
+      ${minDist.toFixed(2)} km
+
+      <br><br>
 
       <a class="btn"
-         href="https://www.google.com/maps/dir/?api=1&destination=${nearest.lat},${nearest.lon}"
-         target="_blank">
-         Naviga
+        target="_blank"
+        href="https://www.google.com/maps/dir/?api=1&destination=${nearest.lat},${nearest.lon}">
+        Naviga
       </a>
     `;
+  },
 
-  }, () => {
+  () => {
 
     document.getElementById('nearest').innerHTML = `
       GPS non disponibile
     `;
-  });
-
-  // MODALITÀ GIORNO/NOTTE
-  function toggleMode() {
-
-    if(map.hasLayer(darkTiles)) {
-      map.removeLayer(darkTiles);
-      lightTiles.addTo(map);
-
-    } else {
-      map.removeLayer(lightTiles);
-      darkTiles.addTo(map);
-    }
   }
+);
 
-  // SOS
-  const sos = L.control({ position:'bottomright' });
+// SERVICE WORKER
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
 
-  sos.onAdd = function() {
+// TEST
+console.assert(points.length > 0, 'Nessun punto caricato');
+console.assert(typeof distance === 'function', 'Funzione distanza mancante');
+console.assert(document.getElementById('map'), 'Elemento mappa mancante');
 
-    const div = L.DomUtil.create('div');
-
-    div.innerHTML = `
-      <a href="tel:112"
-         style="
-           background:#c62828;
-           color:white;
-           padding:16px 18px;
-           border-radius:50%;
-           font-size:24px;
-           text-decoration:none;
-           box-shadow:0 2px 12px rgba(0,0,0,.5);
-         ">
-         SOS
-      </a>
-    `;
-
-    return div;
-  };
-
-  sos.addTo(map);
-
-  // OFFLINE PWA
-  if('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
-
-  // TEST BASE
-  console.assert(points.length > 0, 'Errore: nessun punto caricato');
-  console.assert(typeof toggleMode === 'function', 'Errore toggleMode');
-  console.assert(markerGroup instanceof L.LayerGroup, 'Errore markerGroup');
 </script>
 
 </body>
