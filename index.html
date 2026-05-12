@@ -1,17 +1,9 @@
-
-<!DOCTYPE html>
-<html lang="it">
+<!DOCTYPE html><html lang="it">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Emergenza Rimini</title>
-
-  <meta name="theme-color" content="#c62828" />
-
-  <link rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
-  <style>
+  <title>Emergenza Rimini</title>  <meta name="theme-color" content="#c62828" />  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />  <style>
     html, body {
       margin: 0;
       padding: 0;
@@ -79,31 +71,45 @@
       font-weight: bold;
       box-shadow: 0 2px 12px rgba(0,0,0,.5);
     }
-  </style>
-</head>
-<body>
+  </style></head>
+<body><div id="startupModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:5000; display:flex; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:white; max-width:500px; padding:24px; border-radius:18px; color:#222; font-family:Arial,sans-serif; box-shadow:0 4px 20px rgba(0,0,0,.4);"><h2 style="margin-top:0; color:#c62828;">Informazioni Importanti</h2>
 
-<div class="panel">
-  <h2>Punti Emergenza Rimini</h2>
+<p>
+  Questa mappa è un progetto informativo personale basato su dati pubblici del piano di emergenza comunale.
+  Non rappresenta un servizio ufficiale del Comune o della Protezione Civile.
+</p>
 
-  <div id="nearest">
-    Ricerca posizione...
+<p>
+  La posizione GPS viene utilizzata esclusivamente sul dispositivo dell'utente per individuare il punto più vicino.
+  Nessun dato personale o posizione viene salvato o registrato.
+</p>
+
+<p>
+  In caso di emergenza seguire sempre le indicazioni ufficiali delle autorità competenti.
+</p>
+
+<button onclick="acceptDisclaimer()"
+  style="background:#c62828; color:white; border:none; padding:12px 22px; border-radius:10px; font-size:16px; cursor:pointer; margin-top:10px;">
+  OK
+</button>
+
   </div>
-
-  <div class="legend">
+</div><div class="panel">
+  <h2>Punti Emergenza Rimini</h2>  <div id="nearest">
+    Ricerca posizione...
+  </div>  <div class="legend">
     👥 Attesa<br>
     ⛺ Assistenza<br>
     🏥 Sanitaria
   </div>
-</div>
+</div><a class="sos-button" href="tel:112">SOS</a>
 
-<a class="sos-button" href="tel:112">SOS</a>
+<div id="map"></div><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
 
-<div id="map"></div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<script>
+function acceptDisclaimer() {
+  document.getElementById('startupModal').style.display = 'none';
+}
 
 // MAPPA
 const map = L.map('map').setView([44.06, 12.57], 12);
@@ -329,7 +335,5 @@ console.assert(points.length > 0, 'Nessun punto caricato');
 console.assert(typeof distance === 'function', 'Funzione distanza mancante');
 console.assert(document.getElementById('map'), 'Elemento mappa mancante');
 
-</script>
-
-</body>
+</script></body>
 </html>
