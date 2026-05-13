@@ -116,12 +116,31 @@
     Ricerca posizione...
   </div>
 
-  <div class="legend">
-    👥 Area Attesa<br>
-    ⛺ Area Assistenza<br>
-    🏠 Centro Assistenza<br>
-    🏥 Assistenza Sanitaria
+```html id="6m1l8i"
+<!-- LEGENDA -->
+
+<div class="legend">
+
+  <div class="legend-item"
+    onclick="showLegendInfo('attesa')">
+    👥 Area di attesa
   </div>
+
+  <div class="legend-item"
+    onclick="showLegendInfo('assistenza')">
+    ⛺ Area di assistenza
+  </div>
+
+  <div class="legend-item"
+    onclick="showLegendInfo('centro')">
+    🏠 Centro di assistenza
+  </div>
+
+  <div class="legend-item"
+    onclick="showLegendInfo('sanitaria')">
+    🏥 Area sanitaria
+  </div>
+
 </div>
 
 <a class="sos-button" href="tel:112">SOS</a>
@@ -134,6 +153,68 @@
 
 function acceptDisclaimer() {
   document.getElementById('startupModal').style.display = 'none';
+}
+```javascript id="rqj67n"
+function showLegendInfo(type) {
+
+  let text = '';
+
+  if(type === 'attesa') {
+
+    text = `
+👥 AREA DI ATTESA
+
+Punto di prima raccolta della popolazione in caso di emergenza.
+
+In caso di emergenza la popolazione deve recarsi inizialmente SOLO nelle aree di attesa.
+
+Da questi punti le autorità e la Protezione Civile organizzeranno eventuali trasferimenti verso altre strutture di assistenza.
+    `;
+
+  }
+
+  else if(type === 'assistenza') {
+
+    text = `
+⛺ AREA DI ASSISTENZA
+
+Area destinata all’assistenza temporanea della popolazione.
+
+In queste aree possono essere allestite tende temporanee e servizi di supporto.
+
+La popolazione deve recarsi qui SOLO se indicato dalle autorità competenti o dalla Protezione Civile.
+    `;
+
+  }
+
+  else if(type === 'centro') {
+
+    text = `
+🏠 CENTRO DI ASSISTENZA
+
+Struttura al chiuso destinata all’assistenza temporanea della popolazione.
+
+Questi centri vengono utilizzati per l’accoglienza in ambienti coperti.
+
+La popolazione deve recarsi qui SOLO se indicato dalle autorità competenti o dalla Protezione Civile.
+    `;
+
+  }
+
+  else if(type === 'sanitaria') {
+
+    text = `
+🏥 AREA SANITARIA
+
+Area destinata all’allestimento di strutture sanitarie campali.
+
+Le persone vengono indirizzate qui solo in caso di necessità sanitaria.
+    `;
+
+  }
+
+  alert(text);
+
 }
 
 // MAPPA
