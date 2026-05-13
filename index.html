@@ -1,9 +1,16 @@
-<!DOCTYPE html><html lang="it">
+<!DOCTYPE html>
+<html lang="it">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Emergenza Rimini</title>  <meta name="theme-color" content="#c62828" />  <link rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />  <style>
+  <title>Emergenza Rimini</title>
+
+  <meta name="theme-color" content="#c62828" />
+
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <style>
     html, body {
       margin: 0;
       padding: 0;
@@ -71,41 +78,59 @@
       font-weight: bold;
       box-shadow: 0 2px 12px rgba(0,0,0,.5);
     }
-  </style></head>
-<body><div id="startupModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:5000; display:flex; align-items:center; justify-content:center; padding:20px;">
-  <div style="background:white; max-width:500px; padding:24px; border-radius:18px; color:#222; font-family:Arial,sans-serif; box-shadow:0 4px 20px rgba(0,0,0,.4);"><h2 style="margin-top:0; color:#c62828;">Informazioni Importanti</h2>
+  </style>
+</head>
+<body>
 
-<p>
-  Questa mappa è un progetto informativo personale basato su dati pubblici del piano di emergenza comunale.
-  Non rappresenta un servizio ufficiale del Comune o della Protezione Civile.
-</p>
+<div id="startupModal" style="position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:5000; display:flex; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:white; max-width:500px; padding:24px; border-radius:18px; color:#222; font-family:Arial,sans-serif; box-shadow:0 4px 20px rgba(0,0,0,.4);">
 
-<p>
-  La posizione GPS viene utilizzata esclusivamente sul dispositivo dell'utente per individuare il punto più vicino.
-  Nessun dato personale o posizione viene salvato o registrato.
-</p>
+    <h2 style="margin-top:0; color:#c62828;">Informazioni Importanti</h2>
 
-<p>
-  In caso di emergenza seguire sempre le indicazioni ufficiali delle autorità competenti.
-</p>
+    <p>
+      Questa mappa è un progetto informativo personale basato su dati pubblici del piano di emergenza comunale.
+      Non rappresenta un servizio ufficiale del Comune o della Protezione Civile.
+    </p>
 
-<button onclick="acceptDisclaimer()"
-  style="background:#c62828; color:white; border:none; padding:12px 22px; border-radius:10px; font-size:16px; cursor:pointer; margin-top:10px;">
-  OK
-</button>
+    <p>
+      La posizione GPS viene utilizzata esclusivamente sul dispositivo dell'utente per individuare il punto più vicino.
+      Nessun dato personale o posizione viene salvato o registrato.
+    </p>
+
+    <p>
+      In caso di emergenza seguire sempre le indicazioni ufficiali delle autorità competenti.
+    </p>
+
+    <button onclick="acceptDisclaimer()"
+      style="background:#c62828; color:white; border:none; padding:12px 22px; border-radius:10px; font-size:16px; cursor:pointer; margin-top:10px;">
+      OK
+    </button>
 
   </div>
-</div><div class="panel">
-  <h2>Punti Emergenza Rimini</h2>  <div id="nearest">
+</div>
+
+<div class="panel">
+  <h2>Punti Emergenza Rimini</h2>
+
+  <div id="nearest">
     Ricerca posizione...
-  </div>  <div class="legend">
+  </div>
+
+  <div class="legend">
     👥 Attesa<br>
     ⛺ Assistenza<br>
+    🏢 Centro Assistenza<br>
     🏥 Sanitaria
   </div>
-</div><a class="sos-button" href="tel:112">SOS</a>
+</div>
 
-<div id="map"></div><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
+<a class="sos-button" href="tel:112">SOS</a>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
 
 function acceptDisclaimer() {
   document.getElementById('startupModal').style.display = 'none';
@@ -125,6 +150,7 @@ L.tileLayer(
 const icons = {
   attesa: '👥',
   assistenza: '⛺',
+  centro_assistenza: '🏢',
   sanitaria: '🏥'
 };
 
@@ -217,6 +243,27 @@ const points = [
   { name:'AAS018 - Miramare Erba', description:'Campo da Calcio Miramare Erba', type:'assistenza', lat:44.030476, lon:12.610279 },
   { name:'AAS019 - Miramare Sintetico', description:'Campo da Calcio Miramare sintetico', type:'assistenza', lat:44.028260, lon:12.613756 },
 
+  // CENTRI DI ASSISTENZA
+  { name:'CAS001 - Pattinodromo Viserba Monte', description:'Via Paolo Marconi, 78 - Viserba', type:'centro_assistenza', lat:44.083556, lon:12.524275 },
+  { name:'CAS002 - Fiera', description:'Via Emilia, 155', type:'centro_assistenza', lat:44.072388, lon:12.526386 },
+  { name:'CAS003 - Palestra Spadarolo', description:'Via Mirandola, 4 - Spadarolo', type:'centro_assistenza', lat:44.049822, lon:12.512623 },
+  { name:'CAS004 - Palacongressi di Rimini', description:'Via Della Fiera, 23', type:'centro_assistenza', lat:44.050713, lon:12.566792 },
+  { name:'CAS005 - Palestra Alba Adriatica', description:'Via Vannucci, 4 - Rivazzurra', type:'centro_assistenza', lat:44.043951, lon:12.597257 },
+  { name:'CAS006 - RDS Stadium', description:'Piazzale Renzo Pasolini, 1/c', type:'centro_assistenza', lat:44.039716, lon:12.581484 },
+  { name:'CAS007 - Palestra Casa del Volley', description:'Via Bidente, 41', type:'centro_assistenza', lat:44.038305, lon:12.572249 },
+  { name:'CAS008 - Palestra Ferrari', description:'Via Gambalunga, 106', type:'centro_assistenza', lat:44.064502, lon:12.570676 },
+  { name:'CAS009 - Palestra Zoebeli', description:'Via Villalta, 25 - Santa Giustina', type:'centro_assistenza', lat:44.066185, lon:12.480883 },
+  { name:'CAS010 - Palestra Corpolò', description:'Via Gradizza, 32 - Corpolò', type:'centro_assistenza', lat:44.018247, lon:12.452617 },
+  { name:'CAS011 - Palestra Villaggio 1° Maggio', description:'Via Bidente, 5', type:'centro_assistenza', lat:44.037867, lon:12.575389 },
+  { name:'CAS012 - Palestra Scuola Einaudi', description:'Via Morri, 4 – Viserba', type:'centro_assistenza', lat:44.084867, lon:12.537062 },
+  { name:'CAS013 - Palestra Scuola ITIS', description:'Via Tambroni, 24', type:'centro_assistenza', lat:44.047071, lon:12.584040 },
+  { name:'CAS014 - Palestra Scuola Serpieri', description:'Via Sacramora, 52 - Viserba', type:'centro_assistenza', lat:44.084280, lon:12.536792 },
+  { name:'CAS015 - Palestra Scuola Belluzzi', description:'Via Ada Negri, 34', type:'centro_assistenza', lat:44.046352, lon:12.584711 },
+  { name:'CAS016 - Palestra Valgimigli', description:'Via Missirini', type:'centro_assistenza', lat:44.083914, lon:12.537852 },
+  { name:'CAS017 - Palestra Geodetica', description:'Viale Stoccolma, 42', type:'centro_assistenza', lat:44.030428, lon:12.611186 },
+  { name:'CAS018 - Pattinodromo Lagomaggio', description:'Via Aleardo Aleardi, 3', type:'centro_assistenza', lat:44.050478, lon:12.593925 },
+  { name:'CAS019 - Palestra Marvelli', description:'Via Covignano, 238', type:'centro_assistenza', lat:44.042416, lon:12.551569 },
+
   // SANITARIA
   { name:'SAN001 - Ex Questura', description:'Parcheggio area ex Questura', type:'sanitaria', lat:44.054650, lon:12.578700 }
 ];
@@ -289,6 +336,11 @@ navigator.geolocation.getCurrentPosition(
 
     points.forEach(point => {
 
+      // GUIDA AUTOMATICA SOLO ALLE AREE DI ATTESA
+      if(point.type !== 'attesa') {
+        return;
+      }
+
       const d = distance(
         userLat,
         userLon,
@@ -336,5 +388,7 @@ console.assert(points.length > 0, 'Nessun punto caricato');
 console.assert(typeof distance === 'function', 'Funzione distanza mancante');
 console.assert(document.getElementById('map'), 'Elemento mappa mancante');
 
-</script></body>
+</script>
+
+</body>
 </html>
