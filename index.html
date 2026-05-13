@@ -116,11 +116,134 @@
     Ricerca posizione...
   </div>
 
-  <div class="legend">
-    👥 Attesa<br>
-    ⛺ Assistenza<br>
-    🏢 Centro Assistenza<br>
-    🏥 Sanitaria
+ ```html id="h2pc5t"
+<!-- LEGENDA -->
+
+<div class="legend">
+
+  <div onclick="showLegendInfo('attesa')"
+    style="
+      cursor:pointer;
+      margin-bottom:8px;
+      padding:6px;
+      border-radius:8px;
+      background:rgba(255,255,255,0.08);
+    ">
+    👥 Area di attesa
+  </div>
+
+  <div onclick="showLegendInfo('assistenza')"
+    style="
+      cursor:pointer;
+      margin-bottom:8px;
+      padding:6px;
+      border-radius:8px;
+      background:rgba(255,255,255,0.08);
+    ">
+    ⛺ Area di assistenza
+  </div>
+
+  <div onclick="showLegendInfo('centro')"
+    style="
+      cursor:pointer;
+      margin-bottom:8px;
+      padding:6px;
+      border-radius:8px;
+      background:rgba(255,255,255,0.08);
+    ">
+    🏢 Centro di assistenza
+  </div>
+
+  <div onclick="showLegendInfo('sanitaria')"
+    style="
+      cursor:pointer;
+      padding:6px;
+      border-radius:8px;
+      background:rgba(255,255,255,0.08);
+    ">
+    🏥 Area sanitaria
+  </div>
+
+</div>
+
+
+
+<!-- SCRIPT DESCRIZIONI LEGENDA -->
+
+<script>
+
+function showLegendInfo(type) {
+
+  let title = '';
+  let text = '';
+
+  if(type === 'attesa') {
+
+    title = '👥 Area di attesa';
+
+    text = `
+Punto di prima raccolta della popolazione in caso di emergenza.
+
+In caso di emergenza la popolazione deve recarsi inizialmente SOLO nelle aree di attesa.
+
+Da questi punti le autorità e la Protezione Civile organizzeranno eventuali trasferimenti verso altre strutture di assistenza.
+    `;
+
+  }
+
+  else if(type === 'assistenza') {
+
+    title = '⛺ Area di assistenza';
+
+    text = `
+Area destinata all’assistenza temporanea della popolazione.
+
+In queste aree possono essere allestite tende temporanee e servizi di supporto.
+
+La popolazione deve recarsi qui SOLO se indicato dalle autorità competenti o dalla Protezione Civile.
+
+Le persone vengono normalmente indirizzate qui dopo il passaggio nelle aree di attesa.
+    `;
+
+  }
+
+  else if(type === 'centro') {
+
+    title = '🏢 Centro di assistenza';
+
+    text = `
+Struttura al chiuso destinata all’assistenza temporanea della popolazione.
+
+Questi centri vengono utilizzati per l’accoglienza in ambienti coperti.
+
+La popolazione deve recarsi qui SOLO se indicato dalle autorità competenti o dalla Protezione Civile.
+
+Le persone vengono normalmente indirizzate qui dopo il passaggio nelle aree di attesa.
+    `;
+
+  }
+
+  else if(type === 'sanitaria') {
+
+    title = '🏥 Area sanitaria';
+
+    text = `
+Area destinata all’allestimento di strutture sanitarie campali.
+
+L’accesso avviene esclusivamente secondo le indicazioni delle autorità competenti.
+
+Le persone vengono indirizzate qui solo in caso di necessità sanitaria.
+    `;
+
+  }
+
+  alert(title + "\\n\\n" + text);
+
+}
+
+</script>
+```
+
   </div>
 </div>
 
